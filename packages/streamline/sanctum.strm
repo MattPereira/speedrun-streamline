@@ -1,0 +1,62 @@
+// start block: 18523293
+
+// https://vscode.blockscan.com/ethereum/0x2634aF3E799D3E17C6cf30bCF1275A7e3808F0df
+const CONTRACT_ADDRESS = 0xA90F607224A0236B08Ae02178AB57aef712f86D3;
+const MATT_ADDRESS = 0x41f727fA294E50400aC27317832A9F78659476B9;
+
+
+// how to approach? what logic is avaiable in streamline?
+// do I need to mfn the builders using the AddBuilder Event to get a list?
+// or i can i save an object that grows if the key (builder address) does not already exist inside?
+
+// starting with simple goal of finding how much my EAO has withdrawn from the contract
+// then try to figure out how to return list of all builders with their individual total withdrawals
+
+
+// Map module takes input(s) and outputs something
+mfn map_events(BLOCK) {
+    #{
+        withdraw: sanctum::Withdraw(BLOCK, [global::CONTRACT_ADDRESS]),
+        builders: sanctum::AddBuilder(BLOCK, [global::CONTRACT_ADDRESS])
+    }
+}
+
+mfn matt_withdrawals(map_events) {
+    let withdrawals = map_events?.withdraw;
+
+    let output = [];
+
+    for withdraw in withdrawals {
+        if withdraw.to == MATT_ADDRESS {
+            output.push(withdraw);
+        }
+    }
+
+    output
+}
+
+// Store module acts as key value store, enabling aggregation of values from map modules, but does not output anything
+sfn sum_matt(map_events,s:set) {
+    let withdrawals = map_events?.withdraw;
+
+    for withdraw in withdrawals {
+        if withdraw.to == MATT_ADDRESS {
+            s.add("MATT", withdraw.amount);
+        }
+    }
+}
+
+mfn matt_sum(sum_matt:get) {
+    sum_matt.get("MATT")
+}
+
+// graph_out is necessary for compilation of schema?
+// mfn graph_out(withdrawals, matt_withdrawals) {
+//     let output = [];
+
+//     output.matt_withdrawals(withdrawals);
+
+//     output
+// }
+
+
