@@ -1,79 +1,54 @@
-# 🏗 Scaffold-ETH 2
+A collection of examples for learning how to wield the power of streamline
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+## BuidlGuidl Sanctum Cohort
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+#### 1. What is the data we are working with?
 
-⚙️ Built using NextJS, RainbowKit, Foundry, Wagmi, Viem, and Typescript.
-
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
-
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
-
-## Requirements
-
-Before you begin, you need to install the following tools:
-
-- [Node (>= v18.17)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
-
-## Quickstart
-
-To get started with Scaffold-ETH 2, follow the steps below:
-
-1. Install dependencies if it was skipped in CLI:
+Contract Address
 
 ```
-cd my-dapp-example
-yarn install
+0xA90F607224A0236B08Ae02178AB57aef712f86D3
 ```
 
-2. Run a local network in the first terminal:
+Target Event
 
 ```
-yarn chain
+event Withdraw(address indexed to, uint256 amount, string reason);
 ```
 
-This command starts a local Ethereum network using Foundry. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `packages/foundry/foundry.toml`.
+#### 2. What data do we want to find?
 
-3. On a second terminal, deploy the test contract:
+The total withdraw amounts for each EOA that has withdrawn from this contract.
+
+#### 3. How to get from input->output?
+
+Given a list of Withdraw Events, sum the `amounts` for each `to` address and return a final list of all addresses with their corresponding sums.
+
+#### Streamline CLI
+
+1. Grab the ABI
 
 ```
-yarn deploy
+streamline-cli add "https://api.etherscan.io/api?module=contract&action=getabi&address=0x2634aF3E799D3E17C6cf30bCF1275A7e3808F0df&format=raw" sanctum
 ```
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/foundry/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/foundry/script` to deploy the contract to the network. You can also customize the deploy script.
-
-4. On a third terminal, start your NextJS app:
+2. Build the `output.spkg`
 
 ```
-yarn start
+make build
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+3. Run the substream?
 
-Run smart contract test with `yarn foundry:test`
+```
+sftoken
+```
 
-- Edit your smart contract `YourContract.sol` in `packages/foundry/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/foundry/script`
+```
+make run MODULE=<map_module_name>
+```
 
-## Documentation
+### Learning Resources
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
-
-To know more about its features, check out our [website](https://scaffoldeth.io).
-
-## Contributing to Scaffold-ETH 2
-
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+- https://github.com/MercuricChloride/trader-joe-v2
+- https://github.com/MercuricChloride/streamline/blob/master/doc/grow-a-stream.md#store-modules-aka-sfn
