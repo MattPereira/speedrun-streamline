@@ -1,5 +1,5 @@
 
-START_BLOCK ?= 18523293
+START_BLOCK ?= 18523293 # Block that contract was deployed
 STOP_BLOCK ?= +3
 # MODULE ?= graph_out
 
